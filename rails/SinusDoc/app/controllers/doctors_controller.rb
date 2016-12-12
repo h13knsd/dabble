@@ -3,10 +3,6 @@ class DoctorsController < ApplicationController
 
   # GET /doctors
   # GET /doctors.json
-  def after_sign_up_path_for(resource)
-  doctor_path(current_doctor)
- end
-
   def index
     @doctors = Doctor.all
   end

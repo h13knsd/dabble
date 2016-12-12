@@ -4,6 +4,10 @@ class PatientsController < ApplicationController
   def after_sign_up_path_for(resource)
   patient_path(current_patient)
   end
+  def after_sign_in_path_for(resource)
+  patient_path(current_patient)
+  end
+
   # GET /patients
   # GET /patients.json
   def index

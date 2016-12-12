@@ -11,9 +11,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><%= @doctor.id %></td>
-        <td><%= @doctor.name %></td>
-        <td><%= @doctor.email %></td>
+        <td><%= current_doctor.id %></td>
+        <td><%= current_doctor.name %></td>
+        <td><%= current_doctor.email %></td>
       </tbody>
     </table>
 
@@ -32,7 +32,7 @@
     <th>Options</th>
   </thead>
   <tbody>
-  <% @doctor.patient.each do |p| %>
+  <% current_doctor.patient.each do |p| %>
     <tr>
       <td><%= p.id %></td>
       <td><%= p.name %></td>
