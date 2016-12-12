@@ -1,0 +1,1 @@
+json.partial! "acutes/acute", acute: @acute

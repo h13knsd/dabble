@@ -1,0 +1,1 @@
+json.partial! "chronics/chronic", chronic: @chronic

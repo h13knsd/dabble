@@ -1,0 +1,60 @@
+<h3>PERSONAL DETAILS</h3>
+<table>
+  <thead>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Doctor ID</th>
+    <th>Doctor Name</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= current_patient.id %></td>
+      <td><%= current_patient.name %></td>
+      <td><%= current_patient.email %></td>
+      <td><%= current_patient.doctor %></td>
+      
+    </tbody>
+  </table>
+
+</div>
+<h3>MEDICAL HISTORY</h3>
+<h4>CHRONIC SINUSITIS RECORDS</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Date recorded</th>
+      <th>Discomfort score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% current_patient.chronic.each do |c| %>
+    <tr>
+      <td><%= c.date_created %></td>
+      <td><%= c.discomfort_score %></td>
+    </tr>
+    <% end %>
+  </tbody>
+  </table>
+<br/>
+<p>AVERAGE CHRONIC SINUSITIS DISCOMFORT SCORE: <%= current_patient.chronic.average(:discomfort_score) %><p>
+<br />
+<h4> ACUTE SINUSITIS HISTORY</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Date recorded</th>
+      <th>Answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% current_patient.acute.each do |a| %>
+    <tr>
+      <td><%= a.date_created %></td>
+      <td><%= a.answer %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><%= link_to 'Back', patients_path %></p>

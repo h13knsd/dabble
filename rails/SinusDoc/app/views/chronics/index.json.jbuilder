@@ -1,0 +1,1 @@
+json.array! @chronics, partial: 'chronics/chronic', as: :chronic

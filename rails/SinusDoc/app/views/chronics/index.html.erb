@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Chronics</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Patient</th>
+      <th>Date created</th>
+      <th>Discomfort score</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @chronics.each do |chronic| %>
+      <tr>
+        <td><%= chronic.patient_id %></td>
+        <td><%= chronic.date_created %></td>
+        <td><%= chronic.discomfort_score %></td>
+        <td><%= link_to 'Show', chronic %></td>
+        <td><%= link_to 'Edit', edit_chronic_path(chronic) %></td>
+        <td><%= link_to 'Destroy', chronic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Chronic', new_chronic_path %>
+<%= link_to 'back to patient', patients_path%>

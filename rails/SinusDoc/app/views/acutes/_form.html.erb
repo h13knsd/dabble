@@ -1,0 +1,36 @@
+<%= form_for(acute) do |f| %>
+  <% if acute.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(acute.errors.count, "error") %> prohibited this acute from being saved:</h2>
+
+      <ul>
+      <% acute.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p id="question1">Do you have at least 2 of the following symptoms (including at least one of the italicized ones):
+    <i>Nasal congestion, nasal drainage</i>, facial pain or headaches, loss of sense of smell?</p>
+  <p id="question1y", style=display:none>JavaScript can hide HTML elements.</p>
+  <p id="question1n", style=display:none>JavaScript can hide HTML elements.</p>
+
+  <button id="button1yes", type="button" onclick="document.getElementById('question1').style.display='none', document.getElementById('question1y').style.display='inline'">Yes</button>
+  <button id="button1no", type="button" onclick="document.getElementById('question1').style.display='none', document.getElementById('question1n').style.display='inline'">No</button>
+
+  
+  <div class="field">
+    <%= f.label :date_created %>
+    <%= f.datetime_select :date_created %>
+  </div>
+
+  <div class="field">
+    <%= f.label :answer %>
+    <%= f.text_field :answer %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,2 @@
+module ChronicsHelper
+end

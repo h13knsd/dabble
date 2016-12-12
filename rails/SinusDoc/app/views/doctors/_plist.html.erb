@@ -1,0 +1,21 @@
+<table>
+  <thead>
+    <tr>
+      <th>PID</th>
+      <th>PName</th>
+      <th>PEmail</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @doctors.each do |doctor| %>
+        <% doctor.patient.each do |p| %>
+            <tr>
+              <td><%= p.id %></td>
+              <td><%= p.name %></td>
+              <td><%= p.email %></td>
+            </tr>
+          <% end %>
+    <% end %>
+  </tbody>
+</table>

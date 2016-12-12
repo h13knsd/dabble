@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Doctors</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <tr>
+        <td><%= current_doctor.id %></td>
+        <td><%= current_doctor.name %></td>
+        <td><%= current_doctor.email %></td>
+
+      </tr>
+  </tbody>
+</table>
+
+<br>
+<%= link_to "Show", doctors_show_path %>
+<%= link_to "Sign out", destroy_doctor_session_path, :method => :delete %>
