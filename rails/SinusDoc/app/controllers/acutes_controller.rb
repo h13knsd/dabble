@@ -4,7 +4,7 @@ class AcutesController < ApplicationController
   # GET /acutes
   # GET /acutes.json
   def index
-    @acutes = Acute.all
+    @chronics = Chronic.where("patient_id = ?", params[:p_id])
   end
 
   # GET /acutes/1
@@ -70,6 +70,6 @@ class AcutesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def acute_params
-      params.require(:acute).permit(:patient_id, :date_created, :answer)
+      params.require(:acute).permit(:patient_id, :date_created, :answer, :nasal_congestion, :nasal_drainage, :facial_pain_or_headaches, :loss_of_sense_of_smell, :duration, :better_or_worse, :emergency_symptoms)
     end
 end

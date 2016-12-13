@@ -10,14 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207193534) do
+ActiveRecord::Schema.define(version: 20161213042700) do
 
   create_table "acutes", force: :cascade do |t|
     t.datetime "date_created"
     t.string   "answer"
     t.integer  "patient_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "nasal_congestion"
+    t.integer  "nasal_drainage"
+    t.integer  "facial_pain_or_headaches"
+    t.integer  "loss_of_sense_of_smell"
+    t.integer  "duration"
+    t.integer  "better_or_worse"
+    t.boolean  "emergency_symptoms"
     t.index ["patient_id"], name: "index_acutes_on_patient_id"
   end
 

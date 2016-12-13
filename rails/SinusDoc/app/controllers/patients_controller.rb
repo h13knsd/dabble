@@ -1,11 +1,8 @@
 class PatientsController < ApplicationController
   before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
-  def after_sign_up_path_for(resource)
-  patient_path(current_patient)
-  end
   def after_sign_in_path_for(resource)
-  patient_path(current_patient)
+  patients_path
   end
 
   # GET /patients
@@ -23,7 +20,6 @@ class PatientsController < ApplicationController
   def new
     @patient = Patient.new
     @patient.name = current_patient.name
-    @patient.doctor = current_patient.doctor
   end
 
   # GET /patients/1/edit
@@ -34,7 +30,6 @@ class PatientsController < ApplicationController
   # POST /patients.json
   def create
     @patient = Patient.new(patient_params)
-    @patient.doctor = current_patient.doctor
     respond_to do |format|
       if @patient.save
         format.html { redirect_to @patient, notice: 'Patient was successfully created.' }
@@ -75,7 +70,8 @@ class PatientsController < ApplicationController
     def set_patient
       @patient = current_patient
       @patient.name = current_patient.name
-      @patient.doctor = current_patient.doctor
+      @patient.doctor_id = current_patient.doctor_id
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

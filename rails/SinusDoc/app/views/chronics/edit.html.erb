@@ -1,6 +1,8 @@
+<p id="notice"><%= link_to "Sign out", destroy_patient_session_path, :method => :delete %></p>
+
 <h1>Editing Chronic</h1>
 
 <%= render 'form', chronic: @chronic %>
 
 <%= link_to 'Show', @chronic %> |
-<%= link_to 'Back', chronics_path %>
+<%= link_to 'Back', patients_path %>

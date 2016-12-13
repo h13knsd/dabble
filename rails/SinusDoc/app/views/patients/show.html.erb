@@ -1,3 +1,5 @@
+<p id="notice"><%= link_to "Sign out", destroy_patient_session_path, :method => :delete %></p>
+<div class = "cent">
 <h3>PERSONAL DETAILS</h3>
 <table>
   <thead>
@@ -12,19 +14,20 @@
       <td><%= current_patient.id %></td>
       <td><%= current_patient.name %></td>
       <td><%= current_patient.email %></td>
-      <td><%= current_patient.doctor %></td>
-      
+      <td><%= current_patient.doctor.id %></td>
+      <td><%= current_patient.doctor.name %></td>
     </tbody>
   </table>
 
-</div>
+
 <h3>MEDICAL HISTORY</h3>
 <h4>CHRONIC SINUSITIS RECORDS</h4>
-<table>
+<% if current_patient.chronic.size > 0 %>
+<table id = "ptab">
   <thead>
     <tr>
       <th>Date recorded</th>
-      <th>Discomfort score</th>
+      <th>Score</th>
     </tr>
   </thead>
   <tbody>
@@ -35,16 +38,18 @@
     </tr>
     <% end %>
   </tbody>
-  </table>
+</table>
 <br/>
-<p>AVERAGE CHRONIC SINUSITIS DISCOMFORT SCORE: <%= current_patient.chronic.average(:discomfort_score) %><p>
+<p class = "cent">AVERAGE CHRONIC SINUSITIS DISCOMFORT SCORE: <%= current_patient.chronic.average(:discomfort_score) %><p>
+  <% end %>
 <br />
-<h4> ACUTE SINUSITIS HISTORY</h4>
+<h4> ACUTE SINUSITIS TEST RESULTS</h4>
+<% if current_patient.acute.size > 0 %>
 <table>
   <thead>
     <tr>
       <th>Date recorded</th>
-      <th>Answer</th>
+      <th>Diagnosis</th>
     </tr>
   </thead>
   <tbody>
@@ -56,5 +61,6 @@
     <% end %>
   </tbody>
 </table>
-
-<p><%= link_to 'Back', patients_path %></p>
+<% end %>
+<p class = "cent"><%= link_to 'Back', patients_path %></p>
+</div>

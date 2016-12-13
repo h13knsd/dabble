@@ -1,5 +1,9 @@
-<h1>New Acute</h1>
+<p id="notice"><%= link_to "Sign out", destroy_patient_session_path, :method => :delete %></p>
+
+<div class="cent">
+<h1>SINUSITIS TEST</h1>
 
 <%= render 'form', acute: @acute %>
 
-<%= link_to 'Back', acutes_path %>
+<%= link_to 'Back', patients_path %>
+</div>
