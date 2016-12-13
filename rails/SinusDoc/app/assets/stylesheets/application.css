@@ -83,8 +83,16 @@ table {
   text-align: center;
 }
 
+#ptab {
+  table-layout: fixed;  
+}
+
 tr {
-  height: 30px;
+  height: 150%;
+}
+td{
+  padding-bottom: 10px;
+  border-bottom: 5px;
 }
 h2, h3, h4, h5 {
     font-weight: lighter;

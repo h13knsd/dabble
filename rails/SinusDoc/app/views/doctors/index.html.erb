@@ -1,7 +1,7 @@
-<p id="notice"><%= notice %><%= link_to "Sign out", destroy_doctor_session_path, :method => :delete %></p>
+<p id="notice"><%= link_to "Sign out", destroy_doctor_session_path, :method => :delete %></p>
 
 
-<h1>Doctors</h1>
+<h1>Doctor Portal</h1>
 
 <table>
   <thead>
@@ -9,17 +9,25 @@
       <th>ID</th>
       <th>Name</th>
       <th>Email</th>
+      <th>Number of Patients</th>
     </tr>
   </thead>
-
   <tbody>
       <tr>
         <td><%= current_doctor.id %></td>
         <td><%= current_doctor.name %></td>
         <td><%= current_doctor.email %></td>
-        <td><%= link_to "Show", doctors_show_path %></td>
-        <td><%= link_to "Edit", doctors_edit_path %></td>
+        <td><%= current_doctor.patient.size %></td>
       </tr>
+  </tbody>
+</table>
+<p></p>
+<table>
+  <tbody>
+    <tr>
+      <td><%= link_to "SHOW PATIENT DETAILS", doctors_show_path %></td>
+      <td><%= link_to "EDIT PERSONAL DETAILS", doctors_edit_path %></td>
+    </tr>
   </tbody>
 </table>
 

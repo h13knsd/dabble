@@ -17,11 +17,15 @@
     <%= f.datetime_select :date_created %>
   </div>
 <br />
+<p class = "cent">Choose a point on the line to record your amount of discomfort.<br />
+  The score increases from left to right with leftmost point signifying a score of 0 and rightmost point signifying a score of 10</p>
   <div class="field" width=100%>
     <%= f.label :discomfort_score %><br />
     <table>
       <tbody>
         <tr>
+          <td><%= f.radio_button :discomfort_score, 0 %></td>
+          <td><%= f.radio_button :discomfort_score, 0.5 %></td>
           <td><%= f.radio_button :discomfort_score, 1 %></td>
           <td><%= f.radio_button :discomfort_score, 1.5 %></td>
           <td><%= f.radio_button :discomfort_score, 2 %></td>
@@ -42,7 +46,9 @@
           <td><%= f.radio_button :discomfort_score, 9.5 %></td>
           <td><%= f.radio_button :discomfort_score, 10 %></td>
         </tr>
-        <tr>
+        <!--<tr>
+          <td><%= f.label :discomfort_score, 0 %></td>
+          <td><%= f.label :discomfort_score, 0.5 %></td>
           <td><%= f.label :discomfort_score, 1 %></td>
           <td><%= f.label :discomfort_score, 1.5 %></td>
           <td><%= f.label :discomfort_score, 2 %></td>
@@ -62,7 +68,7 @@
           <td><%= f.label :discomfort_score, 9 %></td>
           <td><%= f.label :discomfort_score, 9.5 %></td>
           <td><%= f.label :discomfort_score, 10 %></td>
-        </tr>
+        </tr>-->
       </tbody>
       <table>
 

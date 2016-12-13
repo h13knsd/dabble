@@ -9,4 +9,7 @@ class Doctors::RegistrationsController < Devise::RegistrationsController
   def account_update_params
     params.require(:doctor).permit(:name, :email, :password, :password_confirmation, :current_password)
   end
+  def after_sign_up_path_for(resource)
+  '/doctors/'
+  end
 end

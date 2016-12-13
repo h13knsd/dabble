@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %><%= link_to "Sign out", destroy_doctor_session_path, :method => :delete %></p>
+<p id="notice"><%= link_to "Sign out", destroy_doctor_session_path, :method => :delete %></p>
 <div class="cent">
 <h1>PATIENT DETAILS</h1>
 
@@ -23,7 +23,7 @@
         <thead>
           <tr>
             <th>Date recorded</th>
-            <th>Discomfort score</th>
+            <th>Score</th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +37,13 @@
         </table>
         <% end %>
       </td>
-    <td><%= p.chronic.average(:discomfort_score) %></td>
+    <td>
+      <% if p.chronic.average(:discomfort_score) != nil %>
+        <%= '%.2f' % p.chronic.average(:discomfort_score) %>
+      <% else %>
+        <%= p.chronic.average(:discomfort_score) %>
+      <% end %>
+    </td>
 
     <td>
       <% if p.chronic.size > 0 %>
@@ -45,7 +51,7 @@
         <thead>
           <tr>
             <th>Date recorded</th>
-            <th>Answer</th>
+            <th>Diagnosis</th>
           </tr>
         </thead>
         <tbody>
