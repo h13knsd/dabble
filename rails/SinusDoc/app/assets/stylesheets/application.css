@@ -1,0 +1,105 @@
+
+html {
+  font-family: 'Lato', sans-serif;
+  font-size: 100%;
+}
+
+body {
+   margin: 0;
+   font-size: 18px;
+   /*background-color: #3597d3;*/
+   background-color: white;
+   color: black;
+
+}
+.field{
+  text-align: center;
+}
+.actions{
+  text-align: center;
+}
+
+a:link {
+	color: #3597d3;
+}
+a:visited {
+	color: #3597d3;
+}
+
+a:hover {
+	color: blue;
+}
+
+nav {
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+
+#name {
+  background-color: #3597d3;
+  margin-top: 0;
+	vertical-align: middle;
+	overflow: hidden;
+  white-space: nowrap;
+  padding: 0px 0px;
+  color: white;
+}
+#welcome {
+  background-color: white;
+  font-size: 200%;
+  width: 100%;
+  height: 80%;
+  text-align: center;
+}
+h1 {
+	font-size: 40px;
+  	font-weight: lighter;
+  	text-align: center;
+    text-transform: uppercase;
+
+        color: #3597d3;
+}
+#heading {
+  color: white !important;
+}
+p{
+	padding: 10px 20px;
+	text-align: left;
+}
+
+.big_cap {
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+th {
+  height: 50px;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  text-align: center;
+}
+
+tr {
+  height: 30px;
+}
+h2, h3, h4, h5 {
+    font-weight: lighter;
+    text-align: center;
+    text-transform: uppercase;
+
+    color: #3597d3;
+}
+#notice{
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0px 10px;
+  margin: 0px 0px;
+  text-align: right;
+}
+.cent{
+  text-align: center;
+}

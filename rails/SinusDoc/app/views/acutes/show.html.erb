@@ -1,17 +1,19 @@
-<p>
+<div class = "cent">
+<p class = "cent">
   <strong>Patient:</strong>
   <%= @acute.patient_id %>
 </p>
 
-<p>
+<p class = "cent">
   <strong>Date created:</strong>
   <%= @acute.date_created %>
 </p>
 
-<p>
+
+<p class = "cent">
   <strong>Answer:</strong>
   <%= @acute.answer %>
 </p>
 
-<%= link_to 'Edit', edit_acute_path(@acute) %> |
-<%= link_to 'Back', acutes_path %>
+<%= link_to 'Back', patients_path %>
+</div>

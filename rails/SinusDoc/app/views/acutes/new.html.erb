@@ -1,5 +1,35 @@
+<p id="notice"><%= notice %><%= link_to "Sign out", destroy_patient_session_path, :method => :delete %></p>
+
+<div class="cent">
 <h1>New Acute</h1>
 
 <%= render 'form', acute: @acute %>
 
-<%= link_to 'Back', acutes_path %>
+<% if :nasal_congestion + :nasal_drainage >= 1 %>
+  <% if :nasal_congestion + :nasal_drainage + :facial_pain_or_headaches + :loss_of_sense_of_smell >= 2 %>
+    <% if :duration < 5 %>
+      <%= :answer = "You have been diagnosed with Acute Sinusitis. Recommended treatment: Pain control, over the counter decongestants and nasal saline irrigations as necessitated by symptoms." %>
+    <% elsif :duration < 10 %>
+      <% if :better_or_worse > 0 %>
+        <%= :answer = "You have been diagnosed with Acute Sinusitis. Continue treatment with pain control, over the counter decongestants and nasal saline irrigations as necessitated by symptoms. If symptoms last for 10 days or more, visit your doctor." %>
+      <% else %>
+        <%= :answer = "You have been diagnosed with Acute Sinusitis. Please visit your doctor." %>
+      <% end %>
+    <% elsif :duration < 90 %>
+      <%= :answer = "You have been diagnosed with Acute Sinusitis. Please visit your doctor for a prescription of topical steroids and possibly antibiotics." %>
+    <% else %>
+      <%= :answer = "You have been diagnosed with a possibility of Chronic Sinusitis. Please visit your doctor." %>
+    <% end %>
+  <% else %>
+    <%= :answer = "You may have upper respiratory infection or allergies" %>
+  <% end %>
+<% else %>
+  <%= :answer = "You do not have Sinusitis" %>
+<% end %>
+
+<% if :emergency_symptoms == true %>
+  <%= :answer = "You have a symptom that needs to be treated with emergency. Please immediately visit your doctor." %>
+<% end %>
+
+<%= link_to 'Back', patients_path %>
+</div>

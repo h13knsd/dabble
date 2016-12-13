@@ -2,10 +2,10 @@ class PatientsController < ApplicationController
   before_action :set_patient, only: [:show, :edit, :update, :destroy]
 
   def after_sign_up_path_for(resource)
-  patient_path(current_patient)
+  patients_path
   end
   def after_sign_in_path_for(resource)
-  patient_path(current_patient)
+  patients_path
   end
 
   # GET /patients
@@ -74,7 +74,7 @@ class PatientsController < ApplicationController
       @patient = current_patient
       @patient.name = current_patient.name
       @patient.doctor_id = current_patient.doctor_id
-      
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

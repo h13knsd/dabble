@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %><%= link_to "Sign out", destroy_patient_session_path, :method => :delete %></p>
 
 <h1>Acutes</h1>
 
@@ -29,3 +29,4 @@
 <br>
 
 <%= link_to 'New Acute', new_acute_path %>
+<%= link_to 'back to patient', patients_path%>

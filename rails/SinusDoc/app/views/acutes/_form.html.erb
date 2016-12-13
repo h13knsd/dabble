@@ -1,3 +1,4 @@
+<div class="cent">
 <%= form_for(acute) do |f| %>
   <% if acute.errors.any? %>
     <div id="error_explanation">
@@ -11,26 +12,74 @@
     </div>
   <% end %>
 
-  <p id="question1">Do you have at least 2 of the following symptoms (including at least one of the italicized ones):
-    <i>Nasal congestion, nasal drainage</i>, facial pain or headaches, loss of sense of smell?</p>
-  <p id="question1y", style=display:none>JavaScript can hide HTML elements.</p>
-  <p id="question1n", style=display:none>JavaScript can hide HTML elements.</p>
+<div class="field">
+    <%= f.label :nasal_congestion %>
+    <%= f.label :nasal_congestion, "Yes" %>
+    <%= f.radio_button :nasal_congestion, 1 %>
+    <%= f.label :nasal_congestion, "No" %>
+    <%= f.radio_button :nasal_congestion, 0 %>
+  </div>
 
-  <button id="button1yes", type="button" onclick="document.getElementById('question1').style.display='none', document.getElementById('question1y').style.display='inline'">Yes</button>
-  <button id="button1no", type="button" onclick="document.getElementById('question1').style.display='none', document.getElementById('question1n').style.display='inline'">No</button>
+    <div class="field">
+      <%= f.label :nasal_drainage %>
+      <%= f.label :nasal_drainage, "Yes" %>
+      <%= f.radio_button :nasal_drainage, 1 %>
+      <%= f.label :nasal_drainage, "No" %>
+      <%= f.radio_button :nasal_drainage, 0 %>
+    </div>
 
-  
+      <div class="field">
+        <%= f.label :facial_pain_or_headaches %>
+        <%= f.label :facial_pain_or_headaches, "Yes" %>
+        <%= f.radio_button :facial_pain_or_headaches, 1 %>
+        <%= f.label :facial_pain_or_headaches, "No" %>
+        <%= f.radio_button :facial_pain_or_headaches, 0 %>
+      </div>
+
+        <div class="field">
+          <%= f.label :loss_of_sense_of_smell %>
+          <%= f.label :loss_of_sense_of_smell, "Yes" %>
+          <%= f.radio_button :loss_of_sense_of_smell, 1 %>
+          <%= f.label :loss_of_sense_of_smell, "No" %>
+          <%= f.radio_button :loss_of_sense_of_smell, 0 %>
+        </div>
+
+        <div class="field">
+          <%= f.label :duration %>
+          <%= f.label :duration, "Less than 5 days" %>
+          <%= f.radio_button :duration, 1 %>
+          <%= f.label :duration, "5-10 days" %>
+          <%= f.radio_button :duration, 6 %>
+          <%= f.label :duration, "More than 10 days" %>
+          <%= f.radio_button :duration, 11 %>
+          <%= f.label :duration, "More than 3 months" %>
+          <%= f.radio_button :duration, 100 %>
+        </div>
+
+        <div class="field">
+          <%= f.label :better_or_worse %>
+          <%= f.label :better_or_worse, "Better" %>
+          <%= f.radio_button :better_or_worse, 1 %>
+          <%= f.label :better_or_worse, "Worse" %>
+          <%= f.radio_button :better_or_worse, -1 %>
+        </div>
+
+        <div class="field">
+          <%= f.label :emergency_symptoms %>
+          <%= f.label :emergency_symptoms, "Yes" %>
+          <%= f.radio_button :emergency_symptoms, true %>
+          <%= f.label :emergency_symptoms, "No" %>
+          <%= f.radio_button :emergency_symptoms, false %>
+        </div>
+
   <div class="field">
     <%= f.label :date_created %>
     <%= f.datetime_select :date_created %>
   </div>
 
-  <div class="field">
-    <%= f.label :answer %>
-    <%= f.text_field :answer %>
-  </div>
-
   <div class="actions">
+    
     <%= f.submit %>
   </div>
 <% end %>
+</div>

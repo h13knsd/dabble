@@ -1,3 +1,4 @@
+<div class="cent">
 <%= form_for(chronic) do |f| %>
   <% if chronic.errors.any? %>
     <div id="error_explanation">
@@ -15,13 +16,60 @@
     <%= f.label :date_created %>
     <%= f.datetime_select :date_created %>
   </div>
+<br />
+  <div class="field" width=100%>
+    <%= f.label :discomfort_score %><br />
+    <table>
+      <tbody>
+        <tr>
+          <td><%= f.radio_button :discomfort_score, 1 %></td>
+          <td><%= f.radio_button :discomfort_score, 1.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 2 %></td>
+          <td><%= f.radio_button :discomfort_score, 2.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 3 %></td>
+          <td><%= f.radio_button :discomfort_score, 3.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 4 %></td>
+          <td><%= f.radio_button :discomfort_score, 4.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 5 %></td>
+          <td><%= f.radio_button :discomfort_score, 5.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 6 %></td>
+          <td><%= f.radio_button :discomfort_score, 6.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 7 %></td>
+          <td><%= f.radio_button :discomfort_score, 7.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 8.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 8 %></td>
+          <td><%= f.radio_button :discomfort_score, 9 %></td>
+          <td><%= f.radio_button :discomfort_score, 9.5 %></td>
+          <td><%= f.radio_button :discomfort_score, 10 %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :discomfort_score, 1 %></td>
+          <td><%= f.label :discomfort_score, 1.5 %></td>
+          <td><%= f.label :discomfort_score, 2 %></td>
+          <td><%= f.label :discomfort_score, 2.5 %></td>
+          <td><%= f.label :discomfort_score, 3 %></td>
+          <td><%= f.label :discomfort_score, 3.5 %></td>
+          <td><%= f.label :discomfort_score, 4 %></td>
+          <td><%= f.label :discomfort_score, 4.5 %></td>
+          <td><%= f.label :discomfort_score, 5 %></td>
+          <td><%= f.label :discomfort_score, 5.5 %></td>
+          <td><%= f.label :discomfort_score, 6 %></td>
+          <td><%= f.label :discomfort_score, 6.5 %></td>
+          <td><%= f.label :discomfort_score, 7 %></td>
+          <td><%= f.label :discomfort_score, 7.5 %></td>
+          <td><%= f.label :discomfort_score, 8 %></td>
+          <td><%= f.label :discomfort_score, 8.5 %></td>
+          <td><%= f.label :discomfort_score, 9 %></td>
+          <td><%= f.label :discomfort_score, 9.5 %></td>
+          <td><%= f.label :discomfort_score, 10 %></td>
+        </tr>
+      </tbody>
+      <table>
 
-  <div class="field">
-    <%= f.label :discomfort_score %>
-    <%= f.text_field :discomfort_score %>
   </div>
-
+<br />
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+</div>

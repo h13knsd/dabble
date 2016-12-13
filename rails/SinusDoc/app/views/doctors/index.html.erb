@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p id="notice"><%= notice %><%= link_to "Sign out", destroy_doctor_session_path, :method => :delete %></p>
+
 
 <h1>Doctors</h1>
 
@@ -16,11 +17,10 @@
         <td><%= current_doctor.id %></td>
         <td><%= current_doctor.name %></td>
         <td><%= current_doctor.email %></td>
-
+        <td><%= link_to "Show", doctors_show_path %></td>
+        <td><%= link_to "Edit", doctors_edit_path %></td>
       </tr>
   </tbody>
 </table>
 
 <br>
-<%= link_to "Show", doctors_show_path %>
-<%= link_to "Sign out", destroy_doctor_session_path, :method => :delete %>

@@ -4,7 +4,7 @@ class AcutesController < ApplicationController
   # GET /acutes
   # GET /acutes.json
   def index
-    @acutes = Acute.all
+    @chronics = Chronic.where("patient_id = ?", params[:p_id])
   end
 
   # GET /acutes/1

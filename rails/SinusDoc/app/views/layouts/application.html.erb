@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html>
+
   <head>
     <title>SinusDoc</title>
     <%= csrf_meta_tags %>
-
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <h1>SINUSDOC</h1>
-    <% if notice %>
-  <p class="alert alert-success"><%= notice %></p>
-<% end %>
-<% if alert %>
-  <p class="alert alert-danger"><%= alert %></p>
-<% end %>
+    <div id='name'>
+      <h1 id = "heading">SINUS DOC</h1>
+    </div>
+    <p id="notice"><%= notice %></p>
+
     <%= yield %>
+
   </body>
-</html>
