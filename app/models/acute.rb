@@ -7,6 +7,4 @@ class Acute < ApplicationRecord
   validates :loss_of_sense_of_smell, presence: true
   validates :duration, presence: true
   validates :better_or_worse, presence: true
-  validates :emergency_symptoms, presence: true
-
 end
