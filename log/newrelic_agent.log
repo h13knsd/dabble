@@ -1,0 +1,107 @@
+# Logfile created on 2016-12-16 19:00:19 -0500 by logger.rb/47272
+[2016-12-16 19:00:19 -0500 HurriKane (11428)] INFO : Starting the New Relic agent in "development" environment.
+[2016-12-16 19:00:19 -0500 HurriKane (11428)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2016-12-16 19:00:19 -0500 HurriKane (11428)] INFO : Reading configuration from config/newrelic.yml (C:/Users/Harish/Desktop/dabble/dabble)
+[2016-12-16 19:00:22 -0500 HurriKane (11428)] INFO : New Relic Agent Developer Mode enabled.
+[2016-12-16 19:00:22 -0500 HurriKane (11428)] INFO : Environment: development
+[2016-12-16 19:00:22 -0500 HurriKane (11428)] INFO : No known dispatcher detected.
+[2016-12-16 19:00:22 -0500 HurriKane (11428)] INFO : Application: My Application (Development)
+[2016-12-16 19:00:31 -0500 HurriKane (11428)] WARN : Failed to determine processor count, assuming 1
+[2016-12-16 19:00:36 -0500 HurriKane (11428)] INFO : Installing ActiveJob instrumentation
+[2016-12-16 19:00:38 -0500 HurriKane (11428)] INFO : Installing ActiveRecord 4+ instrumentation
+[2016-12-16 19:00:39 -0500 HurriKane (11428)] INFO : Installing Net instrumentation
+[2016-12-16 19:00:40 -0500 HurriKane (11428)] INFO : Installing deferred Rack::Builder instrumentation
+[2016-12-16 19:00:40 -0500 HurriKane (11428)] INFO : Installing Rack::Builder middleware instrumentation
+[2016-12-16 19:00:40 -0500 HurriKane (11428)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2016-12-16 19:00:40 -0500 HurriKane (11428)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2016-12-16 19:00:40 -0500 HurriKane (11428)] INFO : Installing Rails 3+ middleware instrumentation
+[2016-12-16 19:00:40 -0500 HurriKane (11428)] INFO : Installing Rails 5 Action Cable instrumentation
+[2016-12-16 19:00:40 -0500 HurriKane (11428)] INFO : Installing Rails 5 Controller instrumentation
+[2016-12-16 19:00:46 -0500 HurriKane (11428)] INFO : Installing Rails 5 view instrumentation
+[2016-12-16 19:00:46 -0500 HurriKane (11428)] INFO : Finished instrumentation
+[2016-12-16 19:01:09 -0500 HurriKane (11428)] INFO : Reporting to: https://rpm.newrelic.com/accounts/1503893/applications/34087716
+[2016-12-16 19:01:37 -0500 HurriKane (11428)] INFO : Starting Agent shutdown
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Starting the New Relic agent in "development" environment.
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Reading configuration from config/newrelic.yml (C:/Users/Harish/Desktop/dabble/dabble)
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : New Relic Agent Developer Mode enabled.
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Environment: development
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : No known dispatcher detected.
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Application: My Application (Development)
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] WARN : Failed to determine processor count, assuming 1
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing ActiveJob instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing ActiveRecord 4+ instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing Net instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing deferred Rack::Builder instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing Rack::Builder middleware instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing Rails 3+ middleware instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing Rails 5 Action Cable instrumentation
+[2016-12-16 19:15:35 -0500 HurriKane (6688)] INFO : Installing Rails 5 Controller instrumentation
+[2016-12-16 19:15:36 -0500 HurriKane (6688)] INFO : Installing Rails 5 view instrumentation
+[2016-12-16 19:15:36 -0500 HurriKane (6688)] INFO : Finished instrumentation
+[2016-12-16 19:15:48 -0500 HurriKane (6688)] INFO : Starting Agent shutdown
+[2016-12-16 19:29:47 -0500 HurriKane (5628)] INFO : Starting the New Relic agent in "development" environment.
+[2016-12-16 19:29:47 -0500 HurriKane (5628)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2016-12-16 19:29:47 -0500 HurriKane (5628)] INFO : Reading configuration from config/newrelic.yml (C:/Users/Harish/Desktop/dabble/dabble)
+[2016-12-16 19:29:47 -0500 HurriKane (5628)] INFO : New Relic Agent Developer Mode enabled.
+[2016-12-16 19:29:47 -0500 HurriKane (5628)] INFO : Environment: development
+[2016-12-16 19:29:47 -0500 HurriKane (5628)] INFO : No known dispatcher detected.
+[2016-12-16 19:29:47 -0500 HurriKane (5628)] INFO : Application: My Application (Development)
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] WARN : Failed to determine processor count, assuming 1
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing ActiveJob instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing ActiveRecord 4+ instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing Net instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing deferred Rack::Builder instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing Rack::Builder middleware instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing Rails 3+ middleware instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing Rails 5 Action Cable instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing Rails 5 Controller instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Installing Rails 5 view instrumentation
+[2016-12-16 19:29:48 -0500 HurriKane (5628)] INFO : Finished instrumentation
+[2016-12-16 19:30:00 -0500 HurriKane (5628)] INFO : Starting Agent shutdown
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Starting the New Relic agent in "development" environment.
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Reading configuration from config/newrelic.yml (C:/Users/Harish/Desktop/dabble/dabble)
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : New Relic Agent Developer Mode enabled.
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Environment: development
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : No known dispatcher detected.
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Application: My Application (Development)
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] WARN : Failed to determine processor count, assuming 1
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing ActiveJob instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing ActiveRecord 4+ instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing Net instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing deferred Rack::Builder instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing Rack::Builder middleware instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing Rails 3+ middleware instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing Rails 5 Action Cable instrumentation
+[2016-12-16 19:30:22 -0500 HurriKane (6416)] INFO : Installing Rails 5 Controller instrumentation
+[2016-12-16 19:30:23 -0500 HurriKane (6416)] INFO : Installing Rails 5 view instrumentation
+[2016-12-16 19:30:23 -0500 HurriKane (6416)] INFO : Finished instrumentation
+[2016-12-16 19:30:34 -0500 HurriKane (6416)] INFO : Starting Agent shutdown
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Starting the New Relic agent in "development" environment.
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Reading configuration from config/newrelic.yml (C:/Users/Harish/Desktop/dabble/dabble)
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : New Relic Agent Developer Mode enabled.
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Environment: development
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : No known dispatcher detected.
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Application: My Application (Development)
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] WARN : Failed to determine processor count, assuming 1
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing ActiveJob instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing ActiveRecord 4+ instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing Net instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing deferred Rack::Builder instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing Rack::Builder middleware instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing Rails 3+ middleware instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing Rails 5 Action Cable instrumentation
+[2016-12-16 19:30:55 -0500 HurriKane (11824)] INFO : Installing Rails 5 Controller instrumentation
+[2016-12-16 19:30:56 -0500 HurriKane (11824)] INFO : Installing Rails 5 view instrumentation
+[2016-12-16 19:30:56 -0500 HurriKane (11824)] INFO : Finished instrumentation
+[2016-12-16 19:31:07 -0500 HurriKane (11824)] INFO : Starting Agent shutdown
