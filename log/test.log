@@ -1,0 +1,1274 @@
+  [1m[35m (823.0ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (552.3ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreatePatients (20161201211552)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (45.3ms)[0m  [1m[35mCREATE TABLE "patients" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password" varchar, "doctor_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (1.0ms)[0m  [1m[34mselect sqlite_version(*)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE  INDEX "index_patients_on_doctor_id" ON "patients" ("doctor_id")[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161201211552"]]
+  [1m[35m (399.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateChronics (20161201211658)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (31.2ms)[0m  [1m[35mCREATE TABLE "chronics" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "date_created" datetime, "discomfort_score" float, "patient_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE  INDEX "index_chronics_on_patient_id" ON "chronics" ("patient_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161201211658"]]
+  [1m[35m (416.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateAcutes (20161201211717)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (37.2ms)[0m  [1m[35mCREATE TABLE "acutes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "date_created" datetime, "answer" varchar, "patient_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE  INDEX "index_acutes_on_patient_id" ON "acutes" ("patient_id")[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161201211717"]]
+  [1m[35m (373.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateDoctors (20161202163900)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (61.4ms)[0m  [1m[35mCREATE TABLE "doctors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161202163900"]]
+  [1m[35m (369.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to RemoveEmailFromDoctor (20161207191612)
+  [1m[35m (1.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "adoctors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (60.3ms)[0m  [1m[32mINSERT INTO "adoctors" ("id","name","email","password","created_at","updated_at")
+                     SELECT "id","name","email","password","created_at","updated_at" FROM "doctors"[0m
+  [1m[35m (28.6ms)[0m  [1m[35mDROP TABLE "doctors"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "doctors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "password" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("id","name","password","created_at","updated_at")
+                     SELECT "id","name","password","created_at","updated_at" FROM "adoctors"[0m
+  [1m[35m (1.0ms)[0m  [1m[35mDROP TABLE "adoctors"[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161207191612"]]
+  [1m[35m (549.3ms)[0m  [1m[36mcommit transaction[0m
+Migrating to RemovePasswordFromDoctor (20161207191704)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (25.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "adoctors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "password" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "adoctors" ("id","name","password","created_at","updated_at")
+                     SELECT "id","name","password","created_at","updated_at" FROM "doctors"[0m
+  [1m[35m (5.1ms)[0m  [1m[35mDROP TABLE "doctors"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "doctors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (2.0ms)[0m  [1m[32mINSERT INTO "doctors" ("id","name","created_at","updated_at")
+                     SELECT "id","name","created_at","updated_at" FROM "adoctors"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "adoctors"[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161207191704"]]
+  [1m[35m (426.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to RemoveEmailFromPatient (20161207191813)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "apatients" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password" varchar, "doctor_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE  INDEX "tindex_apatients_on_doctor_id" ON "apatients" ("doctor_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "apatients" ("id","name","email","password","doctor_id","created_at","updated_at")
+                     SELECT "id","name","email","password","doctor_id","created_at","updated_at" FROM "patients"[0m
+  [1m[35m (53.0ms)[0m  [1m[35mDROP TABLE "patients"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "patients" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "password" varchar, "doctor_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='tindex_apatients_on_doctor_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='tindex_apatients_on_doctor_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE  INDEX "index_patients_on_doctor_id" ON "patients" ("doctor_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "patients" ("id","name","password","doctor_id","created_at","updated_at")
+                     SELECT "id","name","password","doctor_id","created_at","updated_at" FROM "apatients"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "apatients"[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161207191813"]]
+  [1m[35m (290.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to RemovePasswordFromPatient (20161207191840)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "apatients" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "password" varchar, "doctor_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE  INDEX "tindex_apatients_on_doctor_id" ON "apatients" ("doctor_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "apatients" ("id","name","password","doctor_id","created_at","updated_at")
+                     SELECT "id","name","password","doctor_id","created_at","updated_at" FROM "patients"[0m
+  [1m[35m (57.9ms)[0m  [1m[35mDROP TABLE "patients"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "patients" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "doctor_id" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='tindex_apatients_on_doctor_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='tindex_apatients_on_doctor_id' AND type='index'
+[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE  INDEX "index_patients_on_doctor_id" ON "patients" ("doctor_id")[0m
+  [1m[35m (27.7ms)[0m  [1m[32mINSERT INTO "patients" ("id","name","doctor_id","created_at","updated_at")
+                     SELECT "id","name","doctor_id","created_at","updated_at" FROM "apatients"[0m
+  [1m[35m (1.0ms)[0m  [1m[35mDROP TABLE "apatients"[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161207191840"]]
+  [1m[35m (458.3ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddDeviseToDoctors (20161207192217)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (29.2ms)[0m  [1m[35mALTER TABLE "doctors" ADD "email" varchar DEFAULT '' NOT NULL[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "encrypted_password" varchar DEFAULT '' NOT NULL[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "reset_password_token" varchar[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "reset_password_sent_at" datetime[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "remember_created_at" datetime[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "sign_in_count" integer DEFAULT 0 NOT NULL[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "current_sign_in_at" datetime[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "last_sign_in_at" datetime[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "current_sign_in_ip" varchar[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "doctors" ADD "last_sign_in_ip" varchar[0m
+  [1m[35m (8.9ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_doctors_on_email" ON "doctors" ("email")[0m
+  [1m[35m (0.5ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_doctors_on_email' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_doctors_on_email' AND type='index'
+[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_doctors_on_reset_password_token" ON "doctors" ("reset_password_token")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161207192217"]]
+  [1m[35m (450.8ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddDeviseToPatients (20161207193534)
+  [1m[35m (1.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (62.6ms)[0m  [1m[35mALTER TABLE "patients" ADD "email" varchar DEFAULT '' NOT NULL[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "encrypted_password" varchar DEFAULT '' NOT NULL[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "reset_password_token" varchar[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "reset_password_sent_at" datetime[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "remember_created_at" datetime[0m
+  [1m[35m (0.5ms)[0m  [1m[35mALTER TABLE "patients" ADD "sign_in_count" integer DEFAULT 0 NOT NULL[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "current_sign_in_at" datetime[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "last_sign_in_at" datetime[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "current_sign_in_ip" varchar[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "patients" ADD "last_sign_in_ip" varchar[0m
+  [1m[35m (0.5ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+[0m
+  [1m[35m (23.4ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_patients_on_email" ON "patients" ("email")[0m
+  [1m[35m (1.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_email' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_email' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_patients_on_reset_password_token" ON "patients" ("reset_password_token")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161207193534"]]
+  [1m[35m (519.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddSymptomsToAcutes (20161213042700)
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (30.3ms)[0m  [1m[35mALTER TABLE "acutes" ADD "nasal_congestion" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "acutes" ADD "nasal_drainage" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "acutes" ADD "facial_pain_or_headaches" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "acutes" ADD "loss_of_sense_of_smell" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "acutes" ADD "duration" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "acutes" ADD "better_or_worse" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mALTER TABLE "acutes" ADD "emergency_symptoms" boolean[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20161213042700"]]
+  [1m[35m (332.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.0ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", :environment], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35mSQL (60.7ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "test"], ["created_at", 2016-12-17 00:20:58 UTC], ["updated_at", 2016-12-17 00:20:58 UTC]]
+  [1m[35m (344.9ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_acutes_on_patient_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_acutes_on_patient_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_chronics_on_patient_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_chronics_on_patient_id' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_doctors_on_reset_password_token' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_doctors_on_reset_password_token' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_doctors_on_email' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_doctors_on_email' AND type='index'
+[0m
+  [1m[35m (1.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_reset_password_token' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_reset_password_token' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_email' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_email' AND type='index'
+[0m
+  [1m[35m (0.0ms)[0m  [1m[34m            SELECT sql
+            FROM sqlite_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+            UNION ALL
+            SELECT sql
+            FROM sqlite_temp_master
+            WHERE name='index_patients_on_doctor_id' AND type='index'
+[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (7.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:22:25 UTC], ["updated_at", 2016-12-17 00:22:25 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$CIFCEaLFvVSBgmgpcNI2j.igWntpcZvkfSRlCOhFXRnaDWz1xZ3UK"]]
+  [1m[35m (1.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (2.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:26:17 UTC], ["updated_at", 2016-12-17 00:26:17 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$JE6vjOEa04QMlLc9zPyLyODN7mN.rhanjZec73aGKHSgpTiyamfRO"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (13.1ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:28:27 UTC], ["updated_at", 2016-12-17 00:28:27 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$Bczhqqi8GSqXrgVwrTr6oeDtOe5.LAK6/DiAYLjE/WW3HTGOiLU0e"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (167.1ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:29:09 UTC], ["updated_at", 2016-12-17 00:29:09 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$mXPiIpjASCpGGs35vXaxDu0M/.GayAfBoqdGLJZlwthUphOFiaxOm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Load (0.0ms)[0m  [1m[34mSELECT  "patients".* FROM "patients" WHERE "patients"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (14.5ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:35:52 UTC], ["updated_at", 2016-12-17 00:35:52 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$iyx.JRJqjXH3OHyBMBAyM.7SWujLG1h6DbrFmf/zwAnl6vTy2X/GW"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:38:17 UTC], ["updated_at", 2016-12-17 00:38:17 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$O4g5OtCs8VHKbSmJ0YoXXOD8rIaC.SSjSSwwdf7138XIuajcbXvfq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.7ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:38:17 UTC], ["updated_at", 2016-12-17 00:38:17 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$vNXIORecxyBJISp6XFi.HeBozxDzoo5XOOd4Ep20XSc0ZB2aMNKJ6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-17 00:38:17 UTC], ["updated_at", 2016-12-17 00:38:17 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:38:17 UTC], ["updated_at", 2016-12-17 00:38:17 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$cM6aCGkPC5hv6iRaTvdtku.GgWr3PnWBhftoO7M2bIRaVcLiWHehu"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (2.5ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:40:22 UTC], ["updated_at", 2016-12-17 00:40:22 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$j94zN2kXQlD30P2sCkrs9erkC/1WehV8KUaFFE8z/gEQlHe7BtYjK"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:40:22 UTC], ["updated_at", 2016-12-17 00:40:22 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$NusdbwDP6G69IWYY60Zit.r8t604RPiSY7/6JCkmk5JKIA4uFE4vi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-17 00:40:22 UTC], ["updated_at", 2016-12-17 00:40:22 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:40:22 UTC], ["updated_at", 2016-12-17 00:40:22 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$VQt9GhkxACbF/oqzPuGCNu6JuBqfubknUvGfC.dMNpmqAfsgrre16"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:40:22 UTC], ["updated_at", 2016-12-17 00:40:22 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$qb0hhQsFOqXBv4uxJGOuEeb9j5BUxBrBo62QXPD1jFjOcY8mhCVIS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-17 00:40:22 UTC], ["updated_at", 2016-12-17 00:40:22 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:40:22 UTC], ["updated_at", 2016-12-17 00:40:22 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$Zuq1t3cXHqXttCRS21nKx.AE6/kywioceMXGpAX55eaZtOb.gpS9i"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (2.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:41:02 UTC], ["updated_at", 2016-12-17 00:41:02 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$WHWYqhtt/QxFf0o3.YUFN.YjR5bKNgvNNHtuipfVxLD15W26FwGRm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:41:02 UTC], ["updated_at", 2016-12-17 00:41:02 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Z98ssofYtnDmVFvY0v4ls.9oMO54DiecNodfnRUBgZ7./uQNYpoRO"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-17 00:41:02 UTC], ["updated_at", 2016-12-17 00:41:02 UTC]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:41:02 UTC], ["updated_at", 2016-12-17 00:41:02 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$ggjhus.vEJJuzyi7YludReyFxhm/RvND9Nqlx9zCKAF0ZV2JQ.t3i"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:41:02 UTC], ["updated_at", 2016-12-17 00:41:02 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$//uvSK2o1mgH75xpUvKg8OWZ7fzaCnXXQZY5SZMInnzwQbkl9aiUG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-17 00:41:02 UTC], ["updated_at", 2016-12-17 00:41:02 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:41:02 UTC], ["updated_at", 2016-12-17 00:41:02 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$NjNJKGvW2TQY2zZUlYfdc.qglEmOp8vg0zDcGoN2QUFfrJCHCE0QW"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35m (0.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.8ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$nwqfL5ansDNgYf5qgk9Q2O2hj1spUIlNv53wlV9Rn0ogTkypZp0xm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Vk/Z02QVcdrTYLqAD8DCne9LKy7KHxnj4esEdqXXR/YUiTto1z1PG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC]]
+  [1m[35m (1.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$sEUtxcvcVlu0yfcG77tPbe4xOvz8WxBJzVgW3wThrJoUM8mmRLtmO"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Bu0GCf4xgGFfiQmYD1QnEupF8tWwBwkxGImhUbnYK8PMs3PDgDDtC"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$G2MHI4NKYwTstmfY0sOOeOCjEsSvGh010iWO3v0Yjhie4g0O/oFz2"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "r@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "Rock"], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC], ["email", "r@x.y"], ["encrypted_password", "$2a$04$NBWjAGc/OCveLx4JDffyO.QHBuwbrrIDf/7O2NmntFwfYa5jobviq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-17 00:41:41 UTC], ["updated_at", 2016-12-17 00:41:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Ym9eQYesA/EGK2hFm1Ge3ucVzw8p5BZdKl7rhYR8ILwJLjjgY7v3C"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$ccscsII3sEC8pv1vjYyntuypaH0wNWJwc8rtwBZx0g0m1OeuP/n12"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$GbtD3G4HxgD2c8r6wC0fnOk0uYDP1cr3269kb5ZwBHvdAWGobXah6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (13.2ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$BKm4pSjf0kYpgxcHTs6MqObDq.UuReXaE/YZXLpKzxMB4Ogmbp8MS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$ujWZY9tfZ7jTBkaZ/T.XQuuYLHsJ4N93HpKiQHYgyZfZam4qW6kY."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$0.RNRBBgZw3SbdMVKV.FGuBGXq6CS82r9aicULTXsd2obpss7.Z0K"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$xJ7gxnbPNfkVAVtWKXhNVeg16qam2UJu2uA3YshngQk28N/yRLMJy"]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (3.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$em0GyByA5vQs4946M4umUOVLgd819qrT3UDfe44nJOg51rLxWYZQ."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$G3i/D7FnennRsCk0sgBY3uRALzvGFpfZSRK0Qi3G3B/PD6/AUG7dC"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$tg6QzSMoT5A19hIx4J2mAedmxzx7.Lt.2GFayrJ/6lI3p79LIzP.y"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$geso7kmd.psD.YeLQ.T8Q.kOzJ6zypp3kJKbTOvQG0CVHlP9R3O/K"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:30:25 UTC], ["updated_at", 2016-12-19 01:30:25 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$WLVYFmffghGob2ypI.SI4.fd7VEFpZGgLs9lrBYjeDrJWW6J2yGem"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.5ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (2.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:31:49 UTC], ["updated_at", 2016-12-19 01:31:49 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$OOGv.1KGz/Fy95XK9wGj6.LXz2IMP/eWedh8jP/2PEcN786kGjQAC"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:31:49 UTC], ["updated_at", 2016-12-19 01:31:49 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$gJTBuZuNGT.xZbCV8fT7Ve6qdqKuMugRdsnoHD5jROzxn9D6FPGQS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:31:49 UTC], ["updated_at", 2016-12-19 01:31:49 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.4ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:31:49 UTC], ["updated_at", 2016-12-19 01:31:49 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$tJIAQgB5pVrJPOfyjlKVoeCz5DjvU9qNxLSq3JriRKWAYFR.P30n6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:31:49 UTC], ["updated_at", 2016-12-19 01:31:49 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$a5STbj3GvUpBinPuZohkuebQRZ5S6rInFBwnHheuaJImNe17CfD/a"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$BypAX44RNWVylvYbydKu/eSbaVsUkt2UfNc/kW4SpnnsWZu8YJMQC"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$4cm1PPYsVnJ7KvME6oo7QO2KZAfYAJODGzE15YN96COTLx/1VcOP6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.7ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$1ptWVk.MZWAh3BR7NIyNM.2pJN7s1QatxAsDnRF/DY24LVHKAbZri"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$yi8hAQGsyZuNIMhFNHRkh.yg4Cl/DR4pLb5S.VkepfsiS9..3/snq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$xfPAakSXafGhvrKd9cFaD.HWMsgxn/KNi9N.mqIjrnYpM6f1rg/e6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$BC.Hdr2Uk4jUZIMbggCjIutB6kWeViP25QGCBI.i11M7ug9Jdp2Ba"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (23.2ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:31:50 UTC], ["updated_at", 2016-12-19 01:31:50 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$qy/0TgNt2CFH/r2qxVB42.UFv9ZtUJT3pIWGPEBtBLwGZEYZzG1Ay"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.5ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$047j3NE74Q3pIUNb6LfTjeSWSYFjse.0cpbQ5CBuF9RIAkjjMY68G"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$jE74i8Vgp.ZTfl3YFAMDheTvgLTUBRJTy1woIdg7xDqVuoEpqmoS2"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$yZXQkdXQp3A/RlvdbOr2KO1ICAkSWXNZ78GiESMmKOLK9lkfpq21."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$h4SaZ8D9tCNK4eIrXBP1UuW3v4MPY9F.NhfhGqeDef1H5AN5MgJHK"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$tqVQjgZxWBoZ6CVLZcTd9e3krGasaojouQOTmzxw5V9nCx5/Cv4OO"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$f2bdJsRAvmzxvNuDTcDpbuxojzHED3dpxwFBe1wJrvFGXzJ8elspG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$Jcu4xRnUE.d2R3ta5jmVY.V38NorTgdW5FTEqYiMSZ0T1kSgScZEm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (14.3ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$ZEcVkU02QEafay.5ZXo0y.SAhumch2kHaU7sQSUGKQ341vizYOZEm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$fGLjFKx6.1AKDIkWHeBgGueyQ3K.fHuC7MGOpvIXzB5HERN5bXP7."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$AtctiPQDU6yJgxNzJOWSguf7vV4Ek0WoTtv6dCbfwvZ0ydukecqhe"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:33:07 UTC], ["updated_at", 2016-12-19 01:33:07 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Lck5e4G157ozMfbgHsROFOH9f9yMdn77av/ALCOOUYc0oHsFd8OAK"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (2.4ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$rzhJtDlEnYwkN7jzujLp0eKBkwDFhXDhdmvw66Nn1/wTVV2FmwVou"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.6ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$3qtvsj2J6GASEhRNSOaZhujvqxkGkr6LE3ui6NCHmzvRm0SlRuuRq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$jyeluawT6.tVJo088K4FEuwZstttPdpT0S/I3vA0Jo8oTJro9OubK"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$N7WZyV9/Zog9ICqaLdTY6.UyWHj2Rl4jnElWBJvE3MmbDzyVj8I.O"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$pffeEkcCVeRiF8sTKKrzfeIcO8axCXeTO89iQVxyaWab.j8wsUu9G"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$AH013gKo0a8vc6voui1tHuzQN36PDVGRXRfrKR/kR4plj6jhN.toS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.3ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$wYz.RNH3GV8RIi7civruNOFtTFg5vuhhrvjFfkZhN/hkZdx.kLIm6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$4rPrvYjSrPPxKChADj.t2uebucugR8z9lBFt7rcnhMYUvt1IThOZK"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$DEKK.TcvRhOEJCa4TqXhXu2wUEnXwBmpPgiiIrcZGgf7GmhJDh.V6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$KOY8ntsfJiHAf007NRSd7.MlxiYoQFud5JNPDL5lpmZ1FBnIfOb7."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.3ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$hDAtR/XfF1.SSAS0IP5j2e9.E0Huw9P0ua7zQEO2je44SSXYGeIUa"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$5SzacJ.ABKrXjGKKh72gI.L98COqQ.Pnkiu7ZBLHGjmxs9QpGuGMi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:34:20 UTC], ["updated_at", 2016-12-19 01:34:20 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$O79hpK2HdYlprj2bUkkBm.YnmMg02WYIS7X0FToOh8b9XXqsorJ/i"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$5nnsYRuLSYtZ4BVNYKzVNuSX3sI/3xygpABRU/vLK3uge5uyWad6K"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$TePnYNXK05RrGGGzdwJFau4.nI3CvsZuFWfJLmqzQQUsApFDhFZey"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$izKZoPyiLcxZS7XXHimnnuWD.ZMblfBDTrACtzyCX20lpL0hZinb6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$JEnnoH1LkX1Zneq/.UU.ceZFPqICct2Hw4nzetmNEY9rn.EExplGG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$WrzdyYWdHUjO0oS1tbLlMe236Vm5s3DXLKJtRpjbod2Ce0qyaP6c6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Advu.7AY3Uh7KYp4KnFB.urQ7JMtjva24LhpF5x7rOph4lG2yBkC6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$R3vRsnTXOUwi3UF7anAy0.sG1ACfqOl92CNsihi4dzGLQBha.v5mG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$OO.Q4x5lDobSUTFwITxpnOIpTWkw.YpAWe4m767M87QOJE2LCngym"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.2ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$hmtwRhDi55a5QhWkmvwaz.0ZuSDf02ZUx9uWc.OhnCUULTYgax/VO"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$SK0.mGn7fqHYdiPjrbHwYey8yQOIadY9lPLOsCMwPK9DPNxRZ7iva"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC]]
+  [1m[35m (1.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$D8omQ6A/Gq9hpns5HkvfwOjssyZ8nOYQC4twNN9v9vM7qDGMgxFXy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$Kvzeb5qr89M99zQkDJOIleNEp6DEkIhwIvg/mBXvHEFc0sMC12uNu"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:35:51 UTC], ["updated_at", 2016-12-19 01:35:51 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$cMwARN8iikNfF5XYbAmThOGUaPPRsJWzywGJQLBSQwJZJSaUpTFzO"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$h5lfrXqPlhDWD4u7Qt3HnOv//rJB3WegPyH5LwCFUsbm149wSQT2q"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.5ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$4M8xVa3VBeTAcom2j651xe2PcLqJKmqB.jHjOa/9P1sk3DsL5yoIO"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$wBiQ/QEIyeD8fWQp0NK8Y.MNq5fFtZQscVVVcQSEF4MKfZ87sJMlm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$fHo2N0j8MRrqlUynxnCDWuVWuoLhqkRuEJeIerwadbvR34VPQBDu."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$or4OZoy/9P4qAQ5W00yfr.Hor4GpSFHEEbXz1w/uNjPxXnphY8EXy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$C1D69y1R5Zr4ERLjJj6kPu8POZeiYmXXRAXhlCxAPPBsXM.FwxTfq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$GBwuy/UN5efFTxksXJhwM.GYT2Qi0ps425E1LwFgAeN/7way6jAJy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.6ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$oLXdRpJCp3hcPfgj8wpk8OenAINesT93lF/2BB.w2xMwQkeWP7wMG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$CVdJfjZiQLksOOdtJe.6ouU93WLM7nCZ1bnoxwj5TOZpTxuIakiqq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$YNW567qMs8AWkfzSi8h7weJVoCA77mU2os.IaKFWOwhjoTXrkWDqi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$M..ufETKCVgsu8nG8jWKU.f7B6wHX2oyfrCRKiaVA8bsMSuUQJfzC"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$zYO/QKM2hktbnJUuzIJrKeVTAdNLofsmvl33QFVFpbCk5zl41r2D2"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "patients" WHERE "patients"."doctor_id" = ?[0m  [["doctor_id", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$ooiVaHKmGBvM1QK5pw03TeH1XLfiZmsaPTEGpZnNJSJXRbPhCKIf."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$BEhuzrLAYTZJnLT4NKyU/OleLFeNRmj9IZ5tjQhwrxkZAkYHynjY2"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$q.vpfTn.A4oMhdStcuIndewb/Qks793pgFlQp8Etu0dx8fZBgeqa."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$cxS383ns/1c/icU7uuR6J.qiIcQRrptdukmyrHX0axiI.1kl2Ndsi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$kyakatH/wkXsOyLy1qUy5ONZwqPsAb6RdLPaXvMCQnhhNWFOQUFk6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:39:28 UTC], ["updated_at", 2016-12-19 01:39:28 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$zxfujP9XG0Kr6qZytvr28eu22ECJrGr5hd1Z1iH1ryt.2PdFg/0Zi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$LF9dZHmbk1j3iT9BHE9OGeS5yF3hlH9TN.kvEbmT5h/n4HQ7hGnCW"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$AFzCNEWeLURCjOg4fwWKGO7dnaxKyriLx5XOVayOWcufTX9E6E8gy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$FH6MuWL5UjkP4S4tisHY1uGOat9VbZjU32KWWMxoo.RqIbdos.Lti"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$lhE1DohdaxhWKkitgDVAbOvV14xKgPFOG.FonQPedeuKG54Ti2QsG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$DMGGpUxOomlXpKHR3Dd4FelUyFBMPsQttZ7tfrbAn3ngwftLn/JHe"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (2.2ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$uGgcaC7BcWrGbj..AQKQOeOZu7vsBF04ngUW8.O0Akm4.MsYYQ80e"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$I0cDLEFyNqTnZmoH/lZwmOmvBdQ3.zN3eZglx6dApOLaytCeqSh0S"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.2ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$sgEqNA27Qqo7rh/wPmW0iOWO/7ZTdkPUjlFjjoh.zj5vWfg77Qwtu"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC]]
+  [1m[35m (1.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$/6Vvxb3FNj3n61V8tkxE/.v2mJLoAiaIrfsq1oZv32cfG8Kbb6uVe"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$izuQqBMz4NT64piYei8MseIUDBV1yCYzSOeSb4vhkhaGx/AavXZ5q"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$2ZEg6gSU3KcFTh7RjCm5I.l3/6mIWZmPX3YSGXh0A3riSYfaqSN4W"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.5ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$sWMLjexb8OyP./IUXkkn/OUUcq6H5BRXM4p1YuvdyIXlC/o6PLDOK"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "patients" WHERE "patients"."doctor_id" = ?[0m  [["doctor_id", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$9rh.ZNbGiMMF92R6A4Q3zeklc1sitxgGb1KrPD.DooQo5uwMD02HK"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Z0l8dk3rCYh2Vln.y20FAuRlUprny2SNKjYsxZxBKPG6m8AZZ3yIi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$zSvdT9.hsxJtQhKGwz3K3u8ElNo2pux38DKpAk8fIO.bOoKgWDMhS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$qFgkfBq4j8jYPWPx/Ik4d.lpfXM7S7D2F6MrkT13GQbDaUTTu1cpi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$fIV4irrBcp.7W.Y48CoYtOObsFcg16jZja4cP1Rwq5EIwjLxjH2lq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:45:47 UTC], ["updated_at", 2016-12-19 01:45:47 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$eOXwHA23MoTwLs6xgCvrYOZlU1bPKgNvlXJz4D4PaD/jDXDygYfpq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$79RVUdJwM3.EIS0PKyfvB.n/k89O932QIRg5kRw7a44OED3DEVSUC"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$hoCOZ95cyKEfOVhhrr0MV.60GYwTsQX9ClLOrFEEK3Pb/UiYTETqa"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$mg650T6eAwV6H18gO2pb.ehOMghAa5XWjgVqyf2iejS7jZ6uU6qZ."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$PIHSnAtAXbwTVzDkVOg3ROW5x/KVmrMGxzGJNivOubP33SFa68UvW"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$t47au5Rt6hFWWGb51YL8FesCcho1NWIIaoXBY.UZ4GyvNt0r3KDCq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$cMmnA05I1wVZiexMzTjCIOmMGl3pOP1Lj57xDoRDejpS/0ujRIUde"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$k2GXLE19oIbV6G0MH6aEt.Kbot8KZJKNLkpJJBCMtYrXA8tQUzRG6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$sjQuV9an.IWJX/sR4MbGv.ZuC.l/gsQMsAxalnbIGLjeT.8tecXoi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$yVu.PnS0vG.bEWSw5xu0VuAyOHlObr91nB9rly4MdsS1CR7u.fD9e"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$e3cYUWkLHLOqzSNF7bLOyesS5iENGTavB8dxhtlZFwuXPhVp5jePm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.4ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$PsKpii41T3eHsUJPpep.ge5BMgx93ITmCL8yhP8v4NcW5Hd1gb2Uq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$ROSw8K/RCDy1ir3XhvvbnelLGgQ3JI7SpKYs2OtSKDzl7PVZZrQx6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$HtXDdWgOb2ViNAl5hdi1cO39n3v8StKSt9pMIPNU9qImPbgflhagS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$S1wQDQJcjA1jvqsJH5ftVu8L4wyPHVj.SRZmX/1cn.C6lXoNbmhpy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "patients" WHERE "patients"."doctor_id" = ?[0m  [["doctor_id", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$hPmb.qvrfq1..GXXLVJGN.uTg3dzH3BPB/.3Jzn/IcznjoRJlnfYa"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$YLt4mdVCGY1kJObyWDrNx.fQu54iZS96JHXgBFz1GKl7OPDlknBIy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.4ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$drew4v7Sor6y.mAa.Pr3PuvJcZ6cfnRMB8YoJ3G3X8EzdBNVAsi5O"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.8ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$6KQ22TnWnF9hqhmerQMWZ.zFpcZuapr5l6q2fOAxVnV4RBOl7mGQq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.3ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$n2KKKIlIZWrlV8M.wYQKie0TSHiP8n35NlRoxNGAWZP4Hj9Su7BHS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.5ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:47:41 UTC], ["updated_at", 2016-12-19 01:47:41 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$VGQpa/fRRJT0sJ.fuUxjIeT14s/7JpwMzqLUKwBLYE1FdjS5Ch6Xy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.4ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$qWLWDq72b4xvmQuRM.A9UODf7UTX5hXqb3LpapKiAqtycHzsHifLi"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Y41VAmXHVDKqY53PQgj6JuHTwAG08fyRHvmkhcJYs/ARLzjihmWcG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.5ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$mtPvPkN70I6KNE2eA/rare9eXdXCcFcwEKfjw4/SNCvnp.Xh1jk4W"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$PwV5w/6O9jQs7QiWxMLOpeSrGc3au02oHXNFEibjKFm01dcjwc4z."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctork"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$GHPpbalVduwpACwmyKF1S.D4AgGvnnrCyCcYfDC1MbDqoyH2gwSbe"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (1.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$rLzYVbOVtrWM/KorXdQ41uNRu7YtxXQNJhwm9Vqb9H1CG9XTHyUdy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "acutes" ("patient_id", "created_at", "updated_at", "nasal_congestion", "nasal_drainage", "facial_pain_or_headaches", "loss_of_sense_of_smell", "duration", "better_or_worse", "emergency_symptoms") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["patient_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["nasal_congestion", 1], ["nasal_drainage", 1], ["facial_pain_or_headaches", 1], ["loss_of_sense_of_smell", 1], ["duration", 4], ["better_or_worse", -1], ["emergency_symptoms", true]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$WeJ/Pu96Ui7Q3PgCRZykKO7xfDYIGfPmFCIf1KZBAtPau3F81IF2q"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$Wy1VkVVWNQc/nkJvv8M1wevpZBEdin9yHeGceXKOhLj9B5ESNYfS."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$oYWNF5U9H9qXS.kDes/9d.NJ.p62lltaKEn0XmZhaeWASE4Mj6Y0."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$LnGcYr4yDCasusG5X9fZN.ap5bCgYepuiSZ4bBeTIXpvRGjjFJorq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$dJH4fes2yaR7pTQMXZs90u7Kicc5gYtkeRaqi4oxMi/FljEDumtK."]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$uklQoUYS8rtD4n4uqA8Zl.8negfYCTSi0CxfQrcE69WVKEZrj9J0a"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "chronics" ("discomfort_score", "patient_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["discomfort_score", 5.0], ["patient_id", 1], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$SLCfV8qy9V3nKiALYVN5ouRkh3UtfSVQA5lAik6bCfrwUPbwlyMFm"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (25.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.2ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:13 UTC], ["updated_at", 2016-12-19 01:54:13 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$J8FWUC2bZAwu3gDeFUVKt.EvxWAznsI5VQG7MTyAVC4wJotClyB56"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "patients" WHERE "patients"."doctor_id" = ?[0m  [["doctor_id", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (0.9ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:14 UTC], ["updated_at", 2016-12-19 01:54:14 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$DF9/QAO9k/7R3Vxud6h5v.HK/VLuyVTJNe82Zp9oPfjti/c6jaDWS"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.4ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:14 UTC], ["updated_at", 2016-12-19 01:54:14 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$1V2HnF2pG/WMOEkIrB8.T.2b3f.bF7kBj7lMjB2BvXECukLWzOYMq"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:14 UTC], ["updated_at", 2016-12-19 01:54:14 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$nFeN5Q9dvuHegQvBcQxhK.hitLKVJPFG0UiSklwm0ZJ/ZS9ka1/N6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.0ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:14 UTC], ["updated_at", 2016-12-19 01:54:14 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$YBixZm5YiWOu9L935Bv8MOCqg9zY1CcN0YrmleIdjlOYlUcUTDDCG"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mDoctor Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "doctors" WHERE "doctors"."email" = ? LIMIT ?[0m  [["email", "d@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "doctors" ("name", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?)[0m  [["name", "doctor"], ["created_at", 2016-12-19 01:54:14 UTC], ["updated_at", 2016-12-19 01:54:14 UTC], ["email", "d@x.y"], ["encrypted_password", "$2a$04$QSIbHe2hKpp8DHmfqMUc7uRpP/JWK59MIMsv.yS6jm4wFGF41TVl6"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPatient Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "patients" WHERE "patients"."email" = ? LIMIT ?[0m  [["email", "p@x.y"], ["LIMIT", 1]]
+  [1m[35mSQL (1.1ms)[0m  [1m[32mINSERT INTO "patients" ("name", "doctor_id", "created_at", "updated_at", "email", "encrypted_password") VALUES (?, ?, ?, ?, ?, ?)[0m  [["name", "patient"], ["doctor_id", 1], ["created_at", 2016-12-19 01:54:14 UTC], ["updated_at", 2016-12-19 01:54:14 UTC], ["email", "p@x.y"], ["encrypted_password", "$2a$04$OFZH61slZFKk7LvMizmBV.DbjXbX6ZsAi7BJhnVEkb.Fa4qyidLfy"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[31mrollback transaction[0m

@@ -1,0 +1,87 @@
+{
+  "RSpec": {
+    "coverage": {
+      "C:/Users/Harish/Desktop/dabble/dabble/app/models/acute.rb": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null
+      ],
+      "C:/Users/Harish/Desktop/dabble/dabble/spec/models/chronic_spec.rb": [
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        null
+      ],
+      "C:/Users/Harish/Desktop/dabble/dabble/app/models/chronic.rb": [
+        1,
+        1,
+        null,
+        1,
+        null,
+        null,
+        null
+      ],
+      "C:/Users/Harish/Desktop/dabble/dabble/spec/models/doctor_spec.rb": [
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        null,
+        null
+      ],
+      "C:/Users/Harish/Desktop/dabble/dabble/spec/models/patient_spec.rb": [
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        1,
+        null,
+        null
+      ]
+    },
+    "timestamp": 1482112454
+  }
+}
